@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabungan Upgrade PC</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eaf4ff;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px #bbb;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1769aa;
+        }
+
+        .target {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        input {
+            border: 1px solid #aaa;
+        }
+
+        button {
+            background: #1769aa;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d4f80;
+        }
+
+        .progress {
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .bar {
+            width: 0%;
+            height: 25px;
+            background: #28a745;
+            text-align: center;
+            color: white;
+        }
+
+        .hasil {
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .by11 {
+            margin: 40px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 Tabungan Upgrade pc</h1>
+
+    <div class="target">
+        <b>Target Pembelian:</b>
+        <ul>
+            <li>RAM 8GB + 8GB</li>
+            <li>SSD 256GB</li>
+        </ul>
+
+        <b>Total Target:</b>
+        <span id="target">1500000</span>
+    </div>
+
+    <label>Masukkan jumlah tabungan:</label>
+    <input type="number" id="tabungan" placeholder="nabung kalau mau">
+
+    <button onclick="tambahTabungan()">Tambah Tabungan</button>
+    <button onclick="resetTabungan()" style="background: #dc3545;">
+    Reset Tabungan
+</button>
+
+
+    <div class="hasil">
+        <b>Tabungan Saat Ini:</b>
+        <span id="jumlah">Rp 0</span>
+        <br>
+
+        <b>Kekurangan:</b>
+        <span id="kurang">Rp 1.500.000</span>
+
+        <div class="progress">
+            <div class="bar" id="bar">0%</div>
+        </div>
+
+        <p id="pesan"> 💪</p>
+    </div>
+    <div class="by11">
+        <p><b>&copy; mrifqi 2026</b></p>
+    </div>
+
+</div>
+
+<script>
+
+let totalTabungan = Number(localStorage.getItem("totalTabungan")) || 0;
+
+const target = 1500000;
+
+function rupiah(angka) {
+    return "Rp " + angka.toLocaleString("id-ID");
+}
+
+function tampilkanTabungan() {
+
+    document.getElementById("jumlah").innerText =
+        rupiah(totalTabungan);
+
+    let kekurangan = target - totalTabungan;
+
+    document.getElementById("kurang").innerText =
+        rupiah(kekurangan);
+
+    let persen = (totalTabungan / target) * 100;
+
+    document.getElementById("bar").style.width =
+        persen + "%";
+
+    document.getElementById("bar").innerText =
+        Math.round(persen) + "%";
+
+    if (totalTabungan >= target) {
+        document.getElementById("pesan").innerText =
+            "🎉 Target tercapai! Saatnya membeli RAM dan SSD!";
+    } else {
+        document.getElementById("pesan").innerText =
+            "Semangat menabung! Sedikit lagi menuju target. 💪";
+    }
+}
+
+function tambahTabungan() {
+
+    let input = document.getElementById("tabungan");
+    let nominal = Number(input.value);
+
+    if (nominal <= 0 || isNaN(nominal)) {
+        alert("Masukkan jumlah uang yang benar!");
+        return;
+    }
+
+    totalTabungan += nominal;
+
+    if (totalTabungan > target) {
+        totalTabungan = target;
+    }
+
+    // Menyimpan data
+    localStorage.setItem("totalTabungan", totalTabungan);
+
+    tampilkanTabungan();
+
+    input.value = "";
+}
+
+// Reset tabungan
+function resetTabungan() {
+
+    if (confirm("Yakin ingin mereset semua tabungan?")) {
+
+        totalTabungan = 0;
+
+        localStorage.removeItem("totalTabungan");
+
+        tampilkanTabungan();
+    }
+}
+
+// Menampilkan data yang tersimpan saat halaman dibuka
+tampilkanTabungan();
+
+</script>
+ 
+
+
+</body>
+</html>
